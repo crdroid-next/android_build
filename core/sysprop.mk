@@ -166,9 +166,6 @@ endef
 # by the device implementer. Here, we are adding a mandatory tag that
 # identifies the signing config of the build.
 BUILD_VERSION_TAGS := $(BUILD_VERSION_TAGS)
-ifeq ($(TARGET_BUILD_TYPE),debug)
-  BUILD_VERSION_TAGS += debug
-endif
 # The "test-keys" tag marks builds signed with the old test keys,
 # which are available in the SDK.  "dev-keys" marks builds signed with
 # non-default dev keys (usually private keys from a vendor directory).
@@ -217,20 +214,7 @@ BUILD_THUMBPRINT :=
 BUILD_DESC := $(BUILD_ID)
 
 # BUILD_DISPLAY_ID is shown under Settings -> About Phone
-ifeq ($(TARGET_BUILD_VARIANT),user)
-  # User builds should show:
-  # release build number or branch.buld_number non-release builds
-
-  # Dev. branches should have DISPLAY_BUILD_NUMBER set
-  ifeq (true,$(DISPLAY_BUILD_NUMBER))
-    BUILD_DISPLAY_ID := $(BUILD_ID).$(BUILD_NUMBER_FROM_FILE) $(BUILD_KEYS)
-  else
-    BUILD_DISPLAY_ID := $(BUILD_ID) $(BUILD_KEYS)
-  endif
-else
-  # Non-user builds should show detailed build information
-  BUILD_DISPLAY_ID := $(BUILD_DESC)
-endif
+BUILD_DISPLAY_ID := $(BUILD_ID) $(BUILD_KEYS)
 
 # TARGET_BUILD_FLAVOR and ro.build.flavor are used only by the test
 # harness to distinguish builds. Only add _asan for a sanitized build
